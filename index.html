@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="index.css" />
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <title>本の記録アプリ</title>
+</head>
 
-    <title>本の記録アプリ</title>
-  </head>
+<body>
+  <h1>アプリ名</h1>
 
-  <body>
-    <h1>アプリ名</h1>
+  <!-- タブボタン -->
+  <div class="tab-buttons">
+    <button onclick="showTab('search')">検索から登録する</button>
+    <button onclick="showTab('manual')">手動で登録する</button>
+  </div>
+
+  <!-- タブ内容 - 検索から登録する -->
+  <div id="search" class="tab-content">
     <table id="editor">
       <thead>
         <tr>
@@ -32,19 +40,51 @@
       <tr>
         <th>ISBNコード</th>
         <td>
-          <input type="tel" id="ISBN" minlength="13" maxlength="13" /><button
-            onclick="startScanner()"
-          >
-            カメラでISBNをスキャン
-          </button>
+          <input type="tel" id="ISBN" minlength="13" maxlength="13" />
+          <button onclick="startScanner()">カメラでISBNをスキャン</button>
         </td>
       </tr>
     </table>
     <div align="center">
       <button id="kensaku">検索</button>
     </div>
-    <!-- カメラ表示エリア -->
-    <div id="reader" style="width: 300px; margin: 20px auto"></div>
-    <script src="index.js"></script>
-  </body>
+  </div>
+
+  <!-- タブ内容 - 手動で登録する -->
+  <div id="manual" class="tab-content" style="display: none;">
+    <table id="manualEditor">
+      <thead>
+        <tr>
+          <th colspan="2">手動で登録する</th>
+        </tr>
+      </thead>
+      <tr>
+        <th>本のタイトル</th>
+        <td><input type="text" id="manualBookTitle" /></td>
+      </tr>
+      <tr>
+        <th>著者</th>
+        <td><input type="text" id="manualAuthor" /></td>
+      </tr>
+      <tr>
+        <th>出版社</th>
+        <td><input type="text" id="manualPublisher" /></td>
+      </tr>
+      <tr>
+        <th>ISBNコード</th>
+        <td><input type="tel" id="manualISBN" minlength="13" maxlength="13" /></td>
+      </tr>
+    </table>
+    <div align="center">
+      <button id="register">登録</button>
+    </div>
+  </div>
+
+  <!-- カメラ表示エリア -->
+  <div id="reader" style="width: 300px; margin: 20px auto">
+    <button id="stopScanner" style="display:none;" onclick="stopScanner()">停止</button>
+  </div>
+
+  <script src="index.js"></script>
+</body>
 </html>
