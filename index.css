@@ -1,59 +1,100 @@
 /* テーブル全体のスタイル */
-#editor {
-    width: 80%;
-    max-width: 600px;
-    margin: 20px auto;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    border: 2px solid #696969; /* 外枠の色 */
-    background-color: #f9f9f9;
-  }
-  
-  /* テーブルのヘッダー */
-  #editor thead th {
-    background-color: skyblue;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    font-size: 1.2em;
-    border-bottom: 2px solid #696969; /* 「本を登録する」と「本のタイトル」の間に枠線 */
-  }
-  
-  /* テーブルのセル */
-  #editor th, #editor td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #696969; /* セルの枠線を#696969に */
-  }
-  
-  /* 「出版社」と「ISBNコード」の間に枠線 */
-  #editor tr:nth-child(5) {
-    border-bottom: 2px solid #696969;
-  }
-  
-  /* 入力フィールドのスタイル */
-  #editor input[type="text"],
-  #editor input[type="tel"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  /* ボタンのスタイル */
-  #kensaku {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1em;
-    color: white;
-    background-color: skyblue;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #kensaku:hover {
-    background-color: skyblue;
-  }
-  
+#editor, #manualEditor {
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  border: 2px solid #696969; /* 外枠の色 */
+  background-color: #f9f9f9;
+}
+
+/* タブボタンのスタイル */
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  background-color: lightgray;
+  color: black;
+  transition: background-color 0.3s;
+}
+
+.tab-buttons button.active {
+  background-color: skyblue;
+  color: white;
+}
+
+/* テーブルのヘッダー */
+#editor thead th, #manualEditor thead th {
+  background-color: skyblue;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2em;
+  border-bottom: 2px solid #696969;
+}
+
+/* テーブルのセル */
+#editor th, #editor td, #manualEditor th, #manualEditor td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #696969;
+}
+
+/* 各列の幅を固定 */
+#editor th:nth-child(1), #manualEditor th:nth-child(1) {
+  width: 30%; /* ラベルの列 */
+}
+#editor td:nth-child(2), #manualEditor td:nth-child(2) {
+  width: 70%; /* 入力フィールドの列 */
+}
+
+/* 「出版社」と「ISBNコード」の間に枠線 */
+#editor tr:nth-child(5), #manualEditor tr:nth-child(5) {
+  border-bottom: 2px solid #696969;
+}
+
+/* 入力フィールドのスタイル */
+#editor input[type="text"],
+#editor input[type="tel"],
+#manualEditor input[type="text"],
+#manualEditor input[type="tel"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* 検索・登録ボタンのスタイル */
+#kensaku, #register {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: skyblue;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#kensaku:hover, #register:hover {
+  background-color: skyblue;
+}
+
+/* 非表示のタブ内容 */
+.tab-content {
+  display: none;
+}
+
+/* 初期表示タブのスタイル（JavaScriptで切り替え） */
+#search, #manual {
+  display: none;
+}
