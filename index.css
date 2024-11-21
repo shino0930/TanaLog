@@ -12,6 +12,7 @@
 }
 
 #wrapper nav ul li {
+  list-style-type: none;
   padding: 20px 28px
 }
 
@@ -37,7 +38,7 @@
   position: absolute;
   width: 30px;
   height: 4px;
-  background: #666;
+  background: #696969;
   border-radius: 10px;
   -webkit-transition: all 400ms;
   transition: all 400ms
