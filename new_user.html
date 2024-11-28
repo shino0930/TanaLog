@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新規ユーザー登録</title>
+    <link rel="stylesheet" href="style.css" />
+
+  <body>
+    <div id="wrapper">
+        <p class="btn-gnavi">
+          <span></span>
+          <span></span>
+          <span></span>
+        </p>
+        <nav id="global-navi">
+          <ul class="menu">
+            <li><a href="index.html">登録</a></li>
+            <li><a href="">本棚</a></li>
+            <li><a href="login.html">ログイン</a></li>
+            <li><a href="logout.html">ログアウト</a></li>
+            <li><a href="new_user.html">新規登録</a></li>
+          </ul>
+        </nav>
+    <h1>新規ユーザー登録</h1>
+    <form action="register_user.php" method="post">
+      <label for="username">ユーザーID（20文字以内）:</label><br />
+      <input
+        type="text"
+        id="username"
+        name="username"
+        maxlength="20"
+        required
+      /><br /><br />
+
+      <label for="password">パスワード（8文字以上）:</label><br />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        minlength="8"
+        required
+      /><br /><br />
+
+      <label for="password_confirm">パスワード（確認）:</label><br />
+      <input
+        type="password"
+        id="password_confirm"
+        name="password_confirm"
+        minlength="8"
+        required
+      /><br /><br />
+
+      <button type="submit">登録</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
