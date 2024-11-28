@@ -1,0 +1,175 @@
+/* レイアウトの基本設定 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+#wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ナビゲーションメニュー */
+#wrapper nav {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100%;
+    padding-top: 50px;
+    background: rgba(33, 33, 33, 0.9);
+    font-size: 16px;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+#wrapper nav ul li {
+    list-style-type: none;
+    padding: 20px 28px;
+}
+
+#wrapper nav ul li a {
+    text-decoration: none;
+    color: #ddd;
+}
+
+/* ハンバーガーメニュー */
+#wrapper .btn-gnavi {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 24px;
+    z-index: 3;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 400ms;
+}
+
+#wrapper .btn-gnavi span {
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    background: #696969;
+    border-radius: 10px;
+    transition: all 400ms;
+}
+
+#wrapper .btn-gnavi span:nth-child(1) {
+    top: 0;
+}
+
+#wrapper .btn-gnavi span:nth-child(2) {
+    top: 10px;
+}
+
+#wrapper .btn-gnavi span:nth-child(3) {
+    top: 20px;
+}
+
+#wrapper .btn-gnavi.open {
+    transform: rotate(180deg);
+}
+
+#wrapper .btn-gnavi.open span {
+    background: #fff;
+}
+
+#wrapper .btn-gnavi.open span:nth-child(1) {
+    width: 24px;
+    transform: translate(-7px, 17px) rotate(45deg);
+}
+
+#wrapper .btn-gnavi.open span:nth-child(3) {
+    width: 24px;
+    transform: translate(-7px, -17px) rotate(-45deg);
+}
+
+/* フォーム全体のスタイル */
+form {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 入力フィールド */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* ボタンの共通スタイル */
+button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: skyblue;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: deepskyblue;
+}
+
+/* メッセージ用スタイル */
+.message {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* タブボタン */
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.tab-buttons button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    background-color: lightgray;
+    transition: background-color 0.3s;
+}
+
+.tab-buttons button.active {
+    background-color: skyblue;
+    color: white;
+}
