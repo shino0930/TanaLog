@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログイン画面</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+        <p class="btn-gnavi">
+          <span></span>
+          <span></span>
+          <span></span>
+        </p>
+        <nav id="global-navi">
+          <ul class="menu">
+            <li><a href="index.html">登録</a></li>
+            <li><a href="">本棚</a></li>
+            <li><a href="login.html">ログイン</a></li>
+            <li><a href="logout.html">ログアウト</a></li>
+            <li><a href="new_user.html">新規登録</a></li>
+          </ul>
+        </nav>
+    <div class="login-container">
+      <h2>ログイン</h2>
+      <form action="login.php" method="post">
+        <div class="form-group">
+          <label for="username">ユーザーID:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">パスワード:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-button">ログイン</button>
+      </form>
+      <div class="links">
+        <a href="new_user.html">新規登録はこちら</a>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
