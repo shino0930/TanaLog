@@ -15,7 +15,7 @@
         </p>
         <nav id="global-navi">
           <ul class="menu">
-            <li><a href="index.html">登録</a></li>
+            <li><a href="index.php">登録</a></li>
             <li><a href="">本棚</a></li>
             <li><a href="login.html">ログイン</a></li>
             <li><a href="logout.html">ログアウト</a></li>
@@ -27,7 +27,7 @@
     <p>
       自動的にトップページにリダイレクトされない場合は、以下のリンクをクリックしてください。
     </p>
-    <a href="index.html">トップページへ戻る</a>
+    <a href="index.php">トップページへ戻る</a>
 
     <!-- ログアウト処理を実行 -->
     <script>
@@ -38,7 +38,7 @@
       })
         .then(() => {
           // 処理が終わったらトップページにリダイレクト
-          window.location.href = "index.html";
+          window.location.href = "index.php";
         })
         .catch((error) => {
           console.error("ログアウト処理中にエラーが発生しました:", error);
