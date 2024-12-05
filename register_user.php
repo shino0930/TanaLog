@@ -3,20 +3,20 @@
 $host = 'localhost';
 $dbname = 'mybook_db'; // 任意のデータベース名
 $user = 'root'; // デフォルトユーザー
-$password = ''; // デフォルトパスワード（必要に応じて変更）
+$password = ''; // デフォルトパスワード
 
 // ユーザーからの入力を取得
 $username = $_POST['username'];
-$password = $_POST['password'];
+$userpassword = $_POST['password'];
 $password_confirm = $_POST['password_confirm'];
 
 // 入力データの確認
-if ($password !== $password_confirm) {
+if ($userpassword !== $password_confirm) {
     die("エラー: パスワードが一致しません。<a href='new_user.html'>戻る</a>");
 }
 
-// パスワードをハッシュ化（安全対策）
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+// パスワードをハッシュ化
+$hashed_password = password_hash($userpassword, PASSWORD_DEFAULT);
 
 try {
     // データベース接続
