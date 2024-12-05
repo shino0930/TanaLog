@@ -1,3 +1,18 @@
+#login-status {
+  position: fixed;
+  top: 10px;
+  right: 70px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+#login-status a {
+  color: skyblue;
+  text-decoration: none;
+}
+
 #wrapper nav {
   position: fixed;
   top: 0;
