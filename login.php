@@ -28,12 +28,12 @@ try {
         $_SESSION['username'] = $user['username'];
 
         // ログイン成功
-        header('Location: index.html');
+        header('Location: index.php');
         exit;
     } else {
         // ログイン失敗:エラーメッセージを表示してリダイレクト
         $_SESSION['error'] = 'ユーザー名またはパスワードが正しくありません';
-        header('Location: login.html');
+        header('Location: login.php');
         exit;
     }
 } catch (PDOException $e) {
