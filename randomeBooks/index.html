@@ -10,8 +10,44 @@
     <div>
       <button id="bookLottery" class="btn btn-default">ガチャを回す！</button>
     </div>
-<p class="setumei">ランダムで生成したISBNを、実在する書籍がヒットするまで検索し続けて情報を表示します。<br>
-結果の表示に時間がかかりますが、そのままお待ちください。</p>
+    <p class="setumei">
+      ランダムで生成したISBNを、実在する書籍がヒットするまで検索し続けて情報を表示します。<br />
+      結果の表示に時間がかかりますが、そのままお待ちください。
+    </p>
+
+    <!-- チェックボックス -->
+    <div>
+      <h3>第1桁目（販売対象）</h3>
+      <div id="category1">
+        <label><input type="checkbox" id="selectAll1" /> 全選択</label>
+        <label><input type="checkbox" value="0" /> 一般</label>
+        <label><input type="checkbox" value="1" /> 教養</label>
+        <label><input type="checkbox" value="2" /> 実用</label>
+        <label><input type="checkbox" value="3" /> 専門</label>
+        <label><input type="checkbox" value="4" /> 検定教科書</label>
+        <label><input type="checkbox" value="5" /> 婦人</label>
+        <label><input type="checkbox" value="6" /> 学参I（小中）</label>
+        <label><input type="checkbox" value="7" /> 学参II（高校）</label>
+        <label><input type="checkbox" value="8" /> 児童</label>
+        <label><input type="checkbox" value="9" /> 雑誌扱い</label>
+      </div>
+
+      <h3>第2桁目（形態）</h3>
+      <div id="category2">
+        <label><input type="checkbox" id="selectAll2" /> 全選択</label>
+        <label><input type="checkbox" value="0" /> 単行本</label>
+        <label><input type="checkbox" value="1" /> 文庫</label>
+        <label><input type="checkbox" value="2" /> 新書</label>
+        <label><input type="checkbox" value="3" /> 全集･双書</label>
+        <label><input type="checkbox" value="4" /> ムック･その他</label>
+        <label><input type="checkbox" value="5" /> 事･辞典</label>
+        <label><input type="checkbox" value="6" /> 図鑑</label>
+        <label><input type="checkbox" value="7" /> 絵本</label>
+        <label><input type="checkbox" value="8" /> 磁性媒体など</label>
+        <label><input type="checkbox" value="9" /> コミック</label>
+      </div>
+    </div>
+
     <!-- サムネイル画像表示 -->
     <div id="thumbnail"></div>
     <div>書籍名：<span id="title"></span></div>
@@ -31,6 +67,29 @@
             isbn += Math.floor(Math.random() * 10); // 0-9 のランダムな数字を追加
           }
           return isbn;
+        }
+
+        function isValidCategory(isbn) {
+          const category1Checked = $("#category1 input:checked")
+            .not("#selectAll1")
+            .map(function () {
+              return $(this).val();
+            })
+            .get();
+          const category2Checked = $("#category2 input:checked")
+            .not("#selectAll2")
+            .map(function () {
+              return $(this).val();
+            })
+            .get();
+
+          const cCode1 = isbn.charAt(4); // 第1桁目（販売対象）
+          const cCode2 = isbn.charAt(5); // 第2桁目（形態）
+
+          return (
+            category1Checked.includes(cCode1) &&
+            category2Checked.includes(cCode2)
+          );
         }
 
         function fetchBookData(isbn) {
@@ -58,18 +117,32 @@
               );
             } else {
               console.log(`データが見つかりません: ISBN ${isbn}`);
-              const newISBN = getRandomISBN(); // 新しいISBNを再度生成
-              fetchBookData(newISBN); // 再検索
+              fetchValidISBN(); // 再検索
             }
           }).fail(function () {
             console.log("APIリクエストに失敗しました");
           });
         }
 
+        function fetchValidISBN() {
+          let isbn;
+          do {
+            isbn = getRandomISBN();
+          } while (!isValidCategory(isbn));
+          fetchBookData(isbn);
+        }
+
+        $("#selectAll1").change(function () {
+          $("#category1 input").not(this).prop("checked", this.checked);
+        });
+
+        $("#selectAll2").change(function () {
+          $("#category2 input").not(this).prop("checked", this.checked);
+        });
+
         $("#bookLottery").click(function (e) {
           e.preventDefault();
-          const randomISBN = getRandomISBN();
-          fetchBookData(randomISBN);
+          fetchValidISBN();
         });
       });
     </script>
