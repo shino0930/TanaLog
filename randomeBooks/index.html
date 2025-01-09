@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ブックガチャ</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <button id="bookLottery" class="btn btn-default">ガチャを回す！</button>
+    </div>
+<p class="setumei">ランダムで生成したISBNを、実在する書籍がヒットするまで検索し続けて情報を表示します。<br>
+結果の表示に時間がかかりますが、そのままお待ちください。</p>
+    <!-- サムネイル画像表示 -->
+    <div id="thumbnail"></div>
+    <div>書籍名：<span id="title"></span></div>
+    <div>出版社：<span id="publisher"></span></div>
+    <div>シリーズ：<span id="series"></span></div>
+    <div>著者：<span id="author"></span></div>
+    <div>出版日：<span id="pubdate"></span></div>
+    <div>サムネイルURI：<span id="cover"></span></div>
+    <div>ISBN：<span id="isbn"></span></div>
+
+    <script>
+      $(function () {
+        function getRandomISBN() {
+          const isbnPrefix = "9784";
+          let isbn = isbnPrefix;
+          for (let i = 0; i < 9; i++) {
+            isbn += Math.floor(Math.random() * 10); // 0-9 のランダムな数字を追加
+          }
+          return isbn;
+        }
+
+        function fetchBookData(isbn) {
+          const url = "https://api.openbd.jp/v1/get?isbn=" + isbn;
+
+          $.getJSON(url, function (data) {
+            if (data && data[0] && data[0].summary) {
+              const book = data[0].summary;
+
+              // 書籍情報を表示
+              $("#title").text(book.title || "タイトル情報なし");
+              $("#publisher").text(book.publisher || "出版社情報なし");
+              $("#series").text(book.series || "シリーズ情報なし");
+              $("#author").text(book.author || "著者情報なし");
+              $("#pubdate").text(book.pubdate || "出版日情報なし");
+              $("#cover").text(book.cover || "サムネイル情報なし");
+              $("#isbn").text(isbn); // ISBNを表示
+
+              // サムネイル画像の表示（書影がない場合はNoImage.jpgを表示）
+              const coverImage = book.cover ? book.cover : "NoImage.jpg";
+              $("#thumbnail").html(
+                '<img src="' +
+                  coverImage +
+                  '" alt="書籍画像" style="max-width: 150px; height: auto;"/>'
+              );
+            } else {
+              console.log(`データが見つかりません: ISBN ${isbn}`);
+              const newISBN = getRandomISBN(); // 新しいISBNを再度生成
+              fetchBookData(newISBN); // 再検索
+            }
+          }).fail(function () {
+            console.log("APIリクエストに失敗しました");
+          });
+        }
+
+        $("#bookLottery").click(function (e) {
+          e.preventDefault();
+          const randomISBN = getRandomISBN();
+          fetchBookData(randomISBN);
+        });
+      });
+    </script>
+  </body>
+</html>
