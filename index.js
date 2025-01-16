@@ -1,3 +1,45 @@
+document.addEventListener("DOMContentLoaded", () => {
+    let html5QrCode;
+
+    window.startScanner = function () {
+        const reader = document.getElementById("reader");
+        const stopButton = document.getElementById("stopScanner");
+
+        html5QrCode = new Html5Qrcode("reader");
+
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            (decodedText) => {
+                document.getElementById("ISBN").value = decodedText;
+                stopScanner();
+            }
+        ).then(() => {
+            stopButton.style.display = "inline-block";
+        }).catch(console.error);
+    };
+
+    window.stopScanner = function () {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => {
+                document.getElementById("reader").style.display = "none";
+                document.getElementById("stopScanner").style.display = "none";
+            }).catch(console.error);
+        }
+    };
+
+    window.showTab = function (tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+        document.getElementById(tabId).style.display = 'block';
+
+        document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.tab-buttons button[onclick="showTab('${tabId}')"]`).classList.add('active');
+    };
+
+    showTab('search');
+});
+
+
 $(function () {
     $(".btn-gnavi").on("click", function () {
         // ハンバーガーメニューの位置を設定するための変数
