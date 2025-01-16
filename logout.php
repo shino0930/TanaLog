@@ -3,3 +3,54 @@ session_start();
 session_destroy();
 echo "ログアウトしました";
 ?>
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログアウト</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+        <p class="btn-gnavi">
+          <span></span>
+          <span></span>
+          <span></span>
+        </p>
+        <nav id="global-navi">
+          <ul class="menu">
+            <li><a href="index.php">登録</a></li>
+            <li><a href="bookshelf.php">本棚</a></li>
+            <li><a href="login.html">ログイン</a></li>
+            <li><a href="logout.html">ログアウト</a></li>
+            <li><a href="new_user.html">新規登録</a></li>
+          </ul>
+        </nav>
+    <h1>ログアウト</h1>
+    <p>ログアウト処理を実行中です。しばらくお待ちください。</p>
+    <p>
+      自動的にトップページにリダイレクトされない場合は、以下のリンクをクリックしてください。
+    </p>
+    <a href="index.php">トップページへ戻る</a>
+
+    <!-- ログアウト処理を実行 -->
+    <script>
+      // PHPでログアウト処理を行うlogout.phpにリクエストを送信
+      fetch("logout.php", {
+        method: "POST",
+        credentials: "include", // セッション情報を含む
+      })
+        .then(() => {
+          // 処理が終わったらトップページにリダイレクト
+          window.location.href = "index.php";
+        })
+        .catch((error) => {
+          console.error("ログアウト処理中にエラーが発生しました:", error);
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
