@@ -29,7 +29,6 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-  <h1>本棚</h1>
   <div id="wrapper">
     <p class="btn-gnavi">
       <span></span>
@@ -41,10 +40,12 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <li><a href="index.php">登録</a></li>
         <li><a href="bookshelf.php">本棚</a></li>
         <li><a href="login.html">ログイン</a></li>
-        <li><a href="logout.php">ログアウト</a></li>
+        <li><a href="logout.html">ログアウト</a></li>
         <li><a href="new_user.html">新規登録</a></li>
       </ul>
     </nav>
+
+    <h1>本棚</h1>
     <div class="book-container">
       <?php foreach ($books as $book): ?>
         <div class="book-box">
@@ -55,6 +56,8 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
       <?php endforeach; ?>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>
