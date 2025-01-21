@@ -153,7 +153,6 @@ button:hover {
     border: 1px solid #f5c6cb;
 }
 
-/* タブボタン */
 .tab-buttons {
     display: flex;
     justify-content: center;
@@ -206,4 +205,17 @@ button:hover {
     width: 100px;
     height: auto;
     margin-bottom: 10px;
+}
+
+.delete-btn {
+    background-color: #add8e6;
+    font-size: 16px;
+}
+
+.delete-btn:active {
+    background-color: #87cefa;
+}
+
+.delete-btn:hover {
+    background-color: #87cefa;
 }
