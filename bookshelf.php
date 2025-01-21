@@ -1,10 +1,11 @@
 <?php
-// データベース接続設定
+session_start();
+
+// データベース接続
 $host = 'localhost';
 $dbname = 'mybook_db';
 $username = 'root';
-$password = '';  // パスワードを設定
-
+$password = '';
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -12,10 +13,18 @@ try {
   echo 'Connection failed: ' . $e->getMessage();
 }
 
-// booksテーブルから書籍情報を取得
-$stmt = $pdo->prepare("SELECT id, title, author, isbn, publisher FROM books");
-$stmt->execute();
-$books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// ログインしているユーザーIDを取得
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+// 書籍情報を取得
+if ($user_id !== null) {
+  $stmt = $pdo->prepare("SELECT id, title, author, isbn, publisher FROM books WHERE user_id = :user_id");
+  $stmt->execute([':user_id' => $user_id]);
+  $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+  echo "ログインしていません。";
+  $books = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +55,16 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </nav>
 
     <h1>本棚</h1>
+    <ul>
+      <?php foreach ($books as $book): ?>
+        <li>
+          <strong><?php echo htmlspecialchars($book['title']); ?></strong> -
+          <?php echo htmlspecialchars($book['author']); ?>
+          (<?php echo htmlspecialchars($book['publisher']); ?>)
+        </li>
+      <?php endforeach; ?>
+    </ul>
+
     <div class="book-container">
       <?php foreach ($books as $book): ?>
         <div class="book-box">
@@ -53,14 +72,15 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <p><strong>著者:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
           <p><strong>ISBN:</strong> <?php echo htmlspecialchars($book['isbn']); ?></p>
           <p><strong>出版社:</strong> <?php echo htmlspecialchars($book['publisher']); ?></p>
-          <!-- 削除ボタン -->
           <form action="delete.php" method="POST" onsubmit="return confirm('この本を削除しますか？');">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($book['id']); ?>">
             <button type="submit" class="delete-btn">削除</button>
           </form>
+
         </div>
       <?php endforeach; ?>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="index.js"></script>
 </body>
