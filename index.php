@@ -6,7 +6,7 @@ session_start();
 $host = 'localhost';
 $dbname = 'mybook_db';
 $username = 'root';
-$password = '';  // パスワードを設定
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
     if ($bookData && isset($bookData[0]['summary'])) {
         $book = $bookData[0]['summary'];
 
-        // ユーザーIDがない場合はエラーメッセージを表示
+        // ユーザーIDがない場合
         if ($user_id === null) {
             echo "ユーザーがログインしていないため、書籍の登録はできません。";
             exit;
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
             ':author' => $book['author'],
             ':publisher' => $book['publisher'],
             ':isbn' => $isbn,
-            ':user_id' => $user_id // ユーザーIDを追加
+            ':user_id' => $user_id
         ]);
         echo "書籍が正常に登録されました。";
     } else {
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
         <h1>Tanalog-たなログ-</h1>
 
         <div class="tab-buttons">
-            <button onclick="showTab('search')">検索から登録する</button>
+            <button onclick="showTab('search')">ISBNで登録する</button>
             <button onclick="showTab('manual')">手動で登録する</button>
         </div>
 
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
                 <table id="editor">
                     <thead>
                         <tr>
-                            <th colspan="2">検索から登録する</th>
+                            <th colspan="2">ISBNで登録する</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,43 +125,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
                     </tbody>
                 </table>
                 <div class="center">
-                    <button type="submit" id="kensaku">検索</button>
+                    <button type="submit" id="kensaku">登録</button>
                 </div>
             </form>
         </div>
 
-        <div id="manual" class="tab-content" style="display: none">
-            <table id="manualEditor">
-                <thead>
-                    <tr>
-                        <th colspan="2">手動で登録する</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>本のタイトル</th>
-                        <td><input type="text" id="manualBookTitle" /></td>
-                    </tr>
-                    <tr>
-                        <th>著者</th>
-                        <td><input type="text" id="manualAuthor" /></td>
-                    </tr>
-                    <tr>
-                        <th>出版社</th>
-                        <td><input type="text" id="manualPublisher" /></td>
-                    </tr>
-                    <tr>
-                        <th>ISBNコード</th>
-                        <td>
-                            <input type="tel" id="manualISBN" minlength="13" maxlength="13" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="center">
-                <button id="register">登録</button>
-            </div>
+        <div id="manual" class="tab-content" style="display: none;">
+            <form method="POST" action="index.php">
+                <table id="manualEditor">
+                    <thead>
+                        <tr>
+                            <th colspan="2">手動で登録する</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>タイトル (必須)</th>
+                            <td><input type="text" id="title" name="title" required /></td>
+                        </tr>
+                        <tr>
+                            <th>著者</th>
+                            <td><input type="text" id="author" name="author" /></td>
+                        </tr>
+                        <tr>
+                            <th>出版社</th>
+                            <td><input type="text" id="publisher" name="publisher" /></td>
+                        </tr>
+                        <tr>
+                            <th>ISBN</th>
+                            <td><input type="text" id="isbn" name="isbn" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="center">
+                    <button type="submit" id="kensaku">登録</button>
+                </div>
+            </form>
         </div>
+
+    </div>
     </div>
 
     <div id="reader" style="width: 300px; margin: 20px auto">
