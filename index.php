@@ -1,13 +1,11 @@
 <?php
-// セッションを開始
 session_start();
 
-// データベース接続設定
+// データベース接続
 $host = 'localhost';
 $dbname = 'mybook_db';
 $username = 'root';
 $password = '';
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,10 +16,11 @@ try {
 // ログインしているユーザーIDを取得
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
+// 書籍登録処理（ISBNで登録）
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn']) && !isset($_POST['submit'])) {
     $isbn = $_POST['isbn'];
 
-    // APIを使って書籍情報を取得
+    // OpenBD APIで書籍情報を取得
     $url = "https://api.openbd.jp/v1/get?isbn=" . urlencode($isbn);
     $bookInfo = file_get_contents($url);
     $bookData = json_decode($bookInfo, true);
@@ -29,28 +28,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
     if ($bookData && isset($bookData[0]['summary'])) {
         $book = $bookData[0]['summary'];
 
-        // ユーザーIDがない場合
-        if ($user_id === null) {
-            echo "ユーザーがログインしていないため、書籍の登録はできません。";
-            exit;
+        if ($user_id !== null) {
+            // 書籍情報をデータベースに登録
+            $stmt = $pdo->prepare(
+                "INSERT INTO books (title, author, isbn, publisher, user_id) 
+                VALUES (:title, :author, :isbn, :publisher, :user_id)"
+            );
+            $stmt->execute([
+                ':title' => $book['title'],
+                ':author' => $book['author'],
+                ':isbn' => $isbn,
+                ':publisher' => $book['publisher'],
+                ':user_id' => $user_id,
+            ]);
+            echo "書籍を登録しました！";
+        } else {
+            echo "ユーザーがログインしていません。";
         }
-
-        // 取得した書籍情報をデータベースに保存
-        $stmt = $pdo->prepare("INSERT INTO books (title, author, publisher, isbn, user_id) VALUES (:title, :author, :publisher, :isbn, :user_id)");
-        $stmt->execute([
-            ':title' => $book['title'],
-            ':author' => $book['author'],
-            ':publisher' => $book['publisher'],
-            ':isbn' => $isbn,
-            ':user_id' => $user_id
-        ]);
-        echo "書籍が正常に登録されました。";
     } else {
-        echo "書籍情報が見つかりませんでした。";
+        echo "書籍情報が取得できませんでした。";
+    }
+}
+
+// 書籍登録処理（手動登録）
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+    $title = trim($_POST['title']);
+    $author = trim($_POST['author']);
+    $publisher = trim($_POST['publisher']);
+    $isbn = trim($_POST['isbn']);
+
+    if (empty($title)) {
+        echo "タイトルは必須です。";
+    } elseif ($user_id === null) {
+        echo "ユーザーがログインしていません。";
+    } else {
+        // 手動で入力された書籍情報をデータベースに登録
+        $stmt = $pdo->prepare(
+            "INSERT INTO books (title, author, isbn, publisher, user_id) 
+            VALUES (:title, :author, :isbn, :publisher, :user_id)"
+        );
+        $stmt->execute([
+            ':title' => $title,
+            ':author' => $author,
+            ':isbn' => $isbn,
+            ':publisher' => $publisher,
+            ':user_id' => $user_id,
+        ]);
+        echo "手動登録が完了しました！";
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -66,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
     <?php include('header.php'); ?>
     <div id="wrapper">
         <div id="login-status">
-            <?php if ($username): ?>
-                <p><?php echo htmlspecialchars($username); ?> でログイン中</p>
+            <?php if (isset($_SESSION['username'])): ?>
+                <p><?php echo htmlspecialchars($_SESSION['username']); ?> でログイン中</p>
             <?php else: ?>
                 <p><a href="login.html">ログイン</a></p>
             <?php endif; ?>
@@ -94,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
             <button onclick="showTab('manual')">手動で登録する</button>
         </div>
 
-        <!-- タブ内容: 検索から登録 -->
+        <!-- ISBNで登録するタブ -->
         <div id="search" class="tab-content">
             <form method="POST" action="index.php">
                 <table id="editor">
@@ -105,22 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
                     </thead>
                     <tbody>
                         <tr>
-                            <th>本のタイトル</th>
-                            <td><input type="text" id="booktitle" /></td>
-                        </tr>
-                        <tr>
-                            <th>著者</th>
-                            <td><input type="text" id="author" /></td>
-                        </tr>
-                        <tr>
-                            <th>出版社</th>
-                            <td><input type="text" id="publisher" /></td>
-                        </tr>
-                        <th>ISBNコード</th>
-                        <td>
-                            <input type="tel" id="ISBN" name="isbn" minlength="13" maxlength="20" />
-                            <button type="button" onclick="startScanner()">カメラでISBNをスキャン</button>
-                        </td>
+                            <th>ISBNコード</th>
+                            <td>
+                                <input type="tel" id="ISBN" name="isbn" minlength="13" maxlength="20" required />
+                                <button type="button" onclick="startScanner()">カメラでISBNをスキャン</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -130,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
             </form>
         </div>
 
+        <!-- 手動で登録するタブ -->
         <div id="manual" class="tab-content" style="display: none;">
             <form method="POST" action="index.php">
                 <table id="manualEditor">
@@ -158,16 +175,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['isbn'])) {
                     </tbody>
                 </table>
                 <div class="center">
-                    <button type="submit" id="kensaku">登録</button>
+                    <button type="submit" name="submit">登録</button>
                 </div>
             </form>
         </div>
-
-    </div>
     </div>
 
-    <div id="reader" style="width: 300px; margin: 20px auto">
-        <button id="stopScanner" style="display: none" onclick="stopScanner()">停止</button>
+    <div id="reader" style="width: 300px; margin: 20px auto;">
+        <button id="stopScanner" style="display: none;" onclick="stopScanner()">停止</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
