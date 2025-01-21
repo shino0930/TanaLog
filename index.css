@@ -133,7 +133,7 @@
   border-collapse: collapse;
   font-family: Arial, sans-serif;
   border: 2px solid #696969;
-  background-color: #f9f9f9;
+  background-color: #f4f4f4;
 }
 
 /* タブボタンのスタイル */
@@ -207,4 +207,31 @@ button#kensaku {
 
 #kensaku:hover {
   background-color: deepskyblue;
+}
+
+/* 登録ボタン（統一スタイル） */
+.center button[type="submit"],
+.tab-content .center button {
+  padding: 10px 20px;
+  background-color: skyblue;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.center button[type="submit"]:hover,
+.tab-content .center button:hover {
+  background-color: deepskyblue;
+}
+
+/* ボタンを中央揃えにする */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
