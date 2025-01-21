@@ -13,7 +13,7 @@ try {
 }
 
 // booksテーブルから書籍情報を取得
-$stmt = $pdo->prepare("SELECT title, author, isbn, publisher FROM books");
+$stmt = $pdo->prepare("SELECT id, title, author, isbn, publisher FROM books");
 $stmt->execute();
 $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -25,7 +25,7 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <title>本棚</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="bookshelf.css">
 </head>
 
 <body>
@@ -53,6 +53,11 @@ $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <p><strong>著者:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
           <p><strong>ISBN:</strong> <?php echo htmlspecialchars($book['isbn']); ?></p>
           <p><strong>出版社:</strong> <?php echo htmlspecialchars($book['publisher']); ?></p>
+          <!-- 削除ボタン -->
+          <form action="delete.php" method="POST" onsubmit="return confirm('この本を削除しますか？');">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($book['id']); ?>">
+            <button type="submit" class="delete-btn">削除</button>
+          </form>
         </div>
       <?php endforeach; ?>
     </div>
