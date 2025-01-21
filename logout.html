@@ -25,26 +25,30 @@
     <h1>ログアウト</h1>
     <p>ログアウト処理を実行中です。しばらくお待ちください。</p>
     
-
     <!-- ログアウト処理を実行 -->
     <script>
-      // PHPでログアウト処理を行うlogout.phpにリクエストを送信
       fetch("logout.php", {
         method: "POST",
-        credentials: "include", // セッション情報を含む
+        credentials: "include",
       })
         .then(() => {
-          // 処理が終わったらログインページにリダイレクト
+          // ログアウト成功時に login.html へ遷移
           window.location.href = "login.html";
         })
         .catch((error) => {
           console.error("ログアウト処理中にエラーが発生しました:", error);
+          // エラー時にはエラーメッセージを表示
+          const errorMessage = document.createElement("p");
+          errorMessage.textContent =
+            "ログアウト処理中にエラーが発生しました。手動でログインページに移動してください。";
+          document.body.appendChild(errorMessage);
         });
     </script>
+
     <p>
-      自動的にトップページにリダイレクトされない場合は、以下のリンクをクリックしてください。
+      自動的にログインページにリダイレクトされない場合は、以下のリンクをクリックしてください。
     </p>
-    <a href="index.php">トップページへ戻る</a>
+    <a href="login.html">ログインページへ戻る</a>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="index.js"></script>
   </body>
